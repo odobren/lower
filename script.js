@@ -1,16 +1,11 @@
-document.getElementById("uploadButton").addEventListener("click", function() {
-    var fileInput = document.getElementById('fileInput');
-    var file = fileInput.files[0];
-    if (!file) {
-        alert('Please select a file.');
-        return;
-    }
-
-    var formData = new FormData();
+function uploadFile() {
+    const fileInput = document.getElementById('fileInput');
+    const file = fileInput.files[0];
+    const formData = new FormData();
     formData.append('file', file);
 
-    var loader = document.getElementById('loader');
-    loader.style.display = "block";
+    const loader = document.getElementById('loader');
+    loader.style.display = 'block';
 
     fetch('https://script.google.com/macros/s/AKfycbw5U19DJy6Plkuuf1bY6OQZktK-iT4bBv_4rSM5KBhCOCERXsSkzMVWLXpU0YEsME3f/exec', {
         method: 'POST',
@@ -18,12 +13,25 @@ document.getElementById("uploadButton").addEventListener("click", function() {
     })
     .then(response => response.text())
     .then(data => {
-        document.getElementById("resultMessage").textContent = data;
-        document.getElementById("viewResultButton").style.display = "block";
-        loader.style.display = "none";
+        // Получаем ссылку на файл из ответа
+        const fileLink = data;
+
+        // Копируем ссылку на файл в буфер обмена
+        navigator.clipboard.writeText(fileLink)
+            .then(() => {
+                // Сообщение о успешной загрузке и копировании ссылки
+                document.getElementById('resultMessage').textContent = 'File uploaded successfully. Link copied to clipboard.';
+            })
+            .catch(err => {
+                console.error('Failed to copy link: ', err);
+                document.getElementById('resultMessage').textContent = 'File uploaded successfully, but failed to copy link to clipboard.';
+            });
+
+        loader.style.display = 'none';
     })
     .catch(error => {
         console.error('Error:', error);
-        loader.style.display = "none";
+        document.getElementById('resultMessage').textContent = 'An error occurred while uploading the file.';
+        loader.style.display = 'none';
     });
-});
+}
