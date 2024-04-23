@@ -1,42 +1,56 @@
+<!-- HTML страница (index.html) -->
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Загрузка файлов в Google Sheets</title>
-  <!-- Подключаем библиотеку jQuery для удобства -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>File Upload</title>
+  <!-- Подключаем библиотеку jQuery -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
 <body>
-  <h1>Загрузка файлов в Google Sheets</h1>
-  <form id="uploadForm">
-    <input type="text" name="fileName" placeholder="Имя файла"><br>
-    <input type="text" name="fileFormat" placeholder="Формат файла"><br>
-    <input type="file" name="fileContent"><br>
-    <button type="submit">Загрузить файл</button>
+  <h1>Upload File</h1>
+  <!-- Форма загрузки файла -->
+  <form id="uploadForm" enctype="multipart/form-data">
+    <input type="file" id="fileInput" accept=".pdf, .png" required>
+    <button type="submit">Upload</button>
   </form>
-  <!-- Добавляем элемент для отображения анимации загрузки -->
-  <div id="loading" style="display: none;">Пожалуйста, подождите...</div>
-
+  <!-- Анимация загрузки -->
+  <div id="loader" style="display: none;">
+    <img src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/images/loader-large.gif" alt="Loading...">
+  </div>
   <script>
-    // Обработчик события отправки формы
-    $("#uploadForm").submit(function(e) {
-      e.preventDefault(); // Предотвращаем отправку формы по умолчанию
-      var formData = new FormData(this); // Создаем объект FormData для передачи данных формы
-      $("#loading").show(); // Показываем анимацию загрузки
-      // Отправляем POST-запрос на сервер
-      $.ajax({
-        url: "https://script.google.com/macros/s/AKfycbw5U19DJy6Plkuuf1bY6OQZktK-iT4bBv_4rSM5KBhCOCERXsSkzMVWLXpU0YEsME3f/exec",
-        type: "POST",
-        data: formData,
-        processData: false, // Не обрабатываем данные formData
-        contentType: false, // Не устанавливаем заголовок Content-Type
-        success: function(response) {
-          $("#loading").hide(); // Скрываем анимацию загрузки
-          alert(response); // Выводим сообщение об успешной загрузке
-        },
-        error: function(xhr, status, error) {
-          $("#loading").hide(); // Скрываем анимацию загрузки
-          alert("Произошла ошибка при загрузке файла: " + error); // Выводим сообщение об ошибке
-        }
+    $(document).ready(function() {
+      // Обработка отправки формы
+      $('#uploadForm').submit(function(e) {
+        e.preventDefault();
+        var formData = new FormData();
+        var file = $('#fileInput')[0].files[0];
+        formData.append('file', file);
+        formData.append('fileType', file.type);
+
+        // Показываем анимацию загрузки
+        $('#loader').show();
+
+        // Отправляем файл на сервер
+        $.ajax({
+          url: 'https://script.google.com/macros/s/AKfycbw5U19DJy6Plkuuf1bY6OQZktK-iT4bBv_4rSM5KBhCOCERXsSkzMVWLXpU0YEsME3f/exec',
+          type: 'POST',
+          data: formData,
+          processData: false,
+          contentType: false,
+          success: function(response) {
+            // Скрываем анимацию загрузки и выводим сообщение об успешной загрузке
+            $('#loader').hide();
+            alert(response);
+          },
+          error: function(xhr, status, error) {
+            // Скрываем анимацию загрузки и выводим сообщение об ошибке
+            $('#loader').hide();
+            alert('Error uploading file');
+            console.error(error);
+          }
+        });
       });
     });
   </script>
