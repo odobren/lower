@@ -1,38 +1,30 @@
 function uploadFile() {
-  const fileInput = document.getElementById('fileInput');
-  const loader = document.getElementById('loader');
-  const status = document.getElementById('status');
+    var fileInput = document.getElementById("fileInput");
+    var file = fileInput.files[0];
+    var formData = new FormData();
+    formData.append("file", file);
 
-  const file = fileInput.files[0];
-  if (!file) {
-    alert('Please select a file.');
-    return;
-  }
+    var loader = document.getElementById("loader");
+    loader.style.display = "block"; // Показываем анимацию загрузки
 
-  loader.style.display = 'block';
+    fetch('https://script.google.com/macros/s/AKfycbw5U19DJy6Plkuuf1bY6OQZktK-iT4bBv_4rSM5KBhCOCERXsSkzMVWLXpU0YEsME3f/exec', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.text())
+    .then(data => {
+        var fileId = data; // Получаем ID загруженного файла
+        var fileUrl = `https://drive.google.com/uc?export=view&id=${fileId}`; // Формируем ссылку на файл
 
-  const formData = new FormData();
-  formData.append('file', file);
+        // Передаем ссылку на файл в Google Sheets
+        google.script.run.saveFileUrlToSheet(fileUrl);
 
-  fetch('https://script.google.com/macros/s/AKfycbw5U19DJy6Plkuuf1bY6OQZktK-iT4bBv_4rSM5KBhCOCERXsSkzMVWLXpU0YEsME3f/exec', {
-    method: 'POST',
-    body: formData
-  })
-  .then(response => response.json())
-  .then(data => {
-    loader.style.display = 'none';
-    status.textContent = 'File uploaded successfully!';
-    const fileUrl = data.fileUrl;
-    addToGoogleSheets(fileUrl);
-  })
-  .catch(error => {
-    loader.style.display = 'none';
-    status.textContent = 'Error uploading file: ' + error.message;
-  });
-}
-
-function addToGoogleSheets(fileUrl) {
-  const spreadsheetId = '132llDQJRFBF2dtuX16mF5t4p3v-Z6zgmL36uYh2H1wU';
-  const folderId = '1rVx0u2giWedD--e7slojv2617r8umpbO';
-  // You need to implement the code to add the file URL to Google Sheets using Apps Script
+        document.getElementById("resultMessage").textContent = "File uploaded successfully!";
+        document.getElementById("viewResultButton").style.display = "block"; // Показываем кнопку "Посмотреть результат"
+        loader.style.display = "none"; // Скрываем анимацию загрузки после завершения
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        loader.style.display = "none"; // Скрываем анимацию загрузки в случае ошибки
+    });
 }
