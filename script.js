@@ -1,32 +1,34 @@
 document.getElementById('uploadBtn').addEventListener('click', async function() {
-  const fileInput = document.getElementById('fileInput');
-  const file = fileInput.files[0];
-  if (!file) {
-    alert('Please select a file.');
+  const files = document.getElementById('fileInput').files;
+  if (files.length === 0) {
+    alert('Please select at least one file to upload.');
     return;
   }
 
-  const formData = new FormData();
-  formData.append('file', file);
+  // Show loader animation
+  document.getElementById('loader').style.display = 'block';
 
-  const loadingAnimation = document.getElementById('loadingAnimation');
-  loadingAnimation.classList.remove('hide');
+  const formData = new FormData();
+  for (let i = 0; i < files.length; i++) {
+    formData.append('file', files[i]);
+  }
 
   try {
     const response = await fetch('https://script.google.com/macros/s/AKfycbw5U19DJy6Plkuuf1bY6OQZktK-iT4bBv_4rSM5KBhCOCERXsSkzMVWLXpU0YEsME3f/exec', {
       method: 'POST',
       body: formData
     });
-    const responseData = await response.json();
-    if (responseData.success) {
-      alert('File uploaded successfully. Link: ' + responseData.fileUrl);
+    
+    if (response.ok) {
+      const data = await response.json();
+      alert('Files uploaded successfully. Google Sheets URL: ' + data.sheetUrl);
     } else {
-      alert('Failed to upload file.');
+      throw new Error('Failed to upload files.');
     }
   } catch (error) {
-    console.error('Error uploading file:', error);
-    alert('An error occurred while uploading the file.');
+    alert('Error uploading files: ' + error.message);
   } finally {
-    loadingAnimation.classList.add('hide');
+    // Hide loader animation
+    document.getElementById('loader').style.display = 'none';
   }
 });
