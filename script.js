@@ -1,30 +1,23 @@
-document.getElementById('uploadButton').addEventListener('click', async () => {
-    const fileInput = document.getElementById('fileInput');
-    const file = fileInput.files[0];
-    
-    if (!file) {
-        alert('Please select a file.');
-        return;
-    }
-
-    const formData = new FormData();
+document.getElementById('uploadButton').addEventListener('click', function() {
+    var fileInput = document.getElementById('fileInput');
+    var file = fileInput.files[0];
+    var formData = new FormData();
     formData.append('file', file);
+    var loader = document.getElementById('loader');
+    loader.style.display = 'block'; // Показываем анимированную загрузку
 
-    const loader = document.getElementById('loader');
-    loader.style.display = 'block'; // Show loader animation during upload
-
-    try {
-        const response = await fetch('https://script.google.com/macros/s/AKfycbw5U19DJy6Plkuuf1bY6OQZktK-iT4bBv_4rSM5KBhCOCERXsSkzMVWLXpU0YEsME3f/exec', {
-            method: 'POST',
-            body: formData
-        });
-        
-        const data = await response.text();
+    fetch('https://script.google.com/macros/s/AKfycbw5U19DJy6Plkuuf1bY6OQZktK-iT4bBv_4rSM5KBhCOCERXsSkzMVWLXpU0YEsME3f/exec', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.text())
+    .then(data => {
         document.getElementById("resultMessage").textContent = data;
-        document.getElementById("viewResultButton").style.display = "block"; // Show "View Result" button
-    } catch (error) {
+        document.getElementById("viewResultButton").style.display = "block"; // Показываем кнопку "Посмотреть результат"
+        loader.style.display = "none"; // Скрываем анимированную загрузку после завершения
+    })
+    .catch(error => {
         console.error('Error:', error);
-    } finally {
-        loader.style.display = 'none'; // Hide loader animation after upload completes or in case of error
-    }
+        loader.style.display = "none"; // Скрываем анимированную загрузку в случае ошибки
+    });
 });
