@@ -1,20 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Upload Files</title>
-<link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Files to Google Sheets</title>
 </head>
 <body>
-<div class="container">
-  <h2>Upload Files</h2>
-  <form id="uploadForm" enctype="multipart/form-data">
-    <input type="file" id="fileInput" accept=".pdf,.png" name="file">
-    <button type="submit" id="uploadButton">Upload</button>
-  </form>
-  <div id="loading" class="loading">Uploading...</div>
-</div>
-<script src="script.js"></script>
+    <input type="file" id="fileInput" accept=".pdf,.png" multiple>
+    <button onclick="uploadFiles()">Upload Files</button>
+    <div id="loader" style="display:none;">Uploading...</div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/spin.js/2.3.2/spin.min.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
