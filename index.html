@@ -1,16 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>File Upload to Google Sheets</title>
-    <link rel="stylesheet" href="styles.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>File Upload</title>
 </head>
 <body>
-    <input type="file" id="fileInput">
-    <button onclick="uploadFile()">Upload File</button>
-    <div id="loader" class="loader"></div>
-
-    <script src="script.js"></script>
+<h2>Upload File</h2>
+<form id="uploadForm" enctype="multipart/form-data">
+  <input type="file" name="file" id="fileInput">
+  <button type="submit">Upload</button>
+</form>
+<div id="loading" style="display:none;">Uploading...</div>
+<script src="script.js"></script>
 </body>
 </html>
