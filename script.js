@@ -1,27 +1,42 @@
-function uploadFiles() {
-    var files = document.getElementById('fileInput').files;
-    var formData = new FormData();
-    var xhr = new XMLHttpRequest();
-    
-    for (var i = 0; i < files.length; i++) {
-        formData.append('file', files[i]);
+const form = document.getElementById('uploadForm');
+const fileInput = document.getElementById('fileInput');
+const loadingIcon = document.getElementById('loadingIcon');
+
+async function uploadFile() {
+  const file = fileInput.files[0];
+  if (!file) {
+    alert('Please select a file.');
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append('file', file);
+
+  try {
+    showLoading();
+    const response = await fetch('https://script.google.com/macros/s/AKfycbw5U19DJy6Plkuuf1bY6OQZktK-iT4bBv_4rSM5KBhCOCERXsSkzMVWLXpU0YEsME3f/exec', {
+      method: 'POST',
+      body: formData
+    });
+    if (response.ok) {
+      alert('File uploaded successfully!');
+    } else {
+      alert('Failed to upload file.');
     }
+  } catch (error) {
+    console.error('Error:', error);
+    alert('An error occurred. Please try again later.');
+  } finally {
+    hideLoading();
+  }
+}
 
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState === XMLHttpRequest.DONE) {
-            if (xhr.status === 200) {
-                document.getElementById('loader').style.display = 'none';
-                alert('Files uploaded successfully!');
-            } else {
-                document.getElementById('loader').style.display = 'none';
-                alert('Error uploading files!');
-            }
-        }
-    };
+function showLoading() {
+  form.style.display = 'none';
+  loadingIcon.style.display = 'block';
+}
 
-    xhr.open('POST', 'https://script.google.com/macros/s/AKfycbw5U19DJy6Plkuuf1bY6OQZktK-iT4bBv_4rSM5KBhCOCERXsSkzMVWLXpU0YEsME3f/exec');
-    xhr.setRequestHeader('Authorization', 'Bearer ' + 'Your_Access_Token'); // Replace 'Your_Access_Token' with your access token if required
-    xhr.send(formData);
-
-    document.getElementById('loader').style.display = 'block';
+function hideLoading() {
+  form.style.display = 'block';
+  loadingIcon.style.display = 'none';
 }
