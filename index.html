@@ -3,27 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>File Upload to Google Sheets</title>
+<title>Загрузка файлов</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-<style>
-  #uploadForm {
-    text-align: center;
-    margin-top: 50px;
-  }
-  #loadingIcon {
-    display: none;
-  }
-</style>
 </head>
 <body>
+  <form id="uploadForm" enctype="multipart/form-data">
+    <input type="file" id="fileInput" accept=".pdf,.png" multiple>
+    <button type="submit">Загрузить файлы</button>
+  </form>
+  <div id="loading" style="display: none;">
+    <i class="fas fa-spinner fa-spin"></i> Загрузка...
+  </div>
+  <div id="message"></div>
 
-<div id="uploadForm">
-  <h2>Upload File</h2>
-  <input type="file" id="fileInput" accept=".pdf,.png">
-  <button onclick="uploadFile()">Upload</button>
-  <div id="loadingIcon"><i class="fas fa-spinner fa-spin"></i> Uploading...</div>
-</div>
-
-<script src="script.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
