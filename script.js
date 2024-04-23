@@ -1,22 +1,29 @@
 function uploadFile() {
-    var fileInput = document.getElementById('fileInput');
-    var file = fileInput.files[0];
+  const fileInput = document.getElementById('fileInput');
+  const loader = document.getElementById('loader');
 
-    var loader = document.getElementById("loader");
-    loader.style.display = "block";
+  const file = fileInput.files[0];
+  if (!file) {
+    alert("Please select a file.");
+    return;
+  }
 
-    fetch('https://script.google.com/macros/s/AKfycbw5U19DJy6Plkuuf1bY6OQZktK-iT4bBv_4rSM5KBhCOCERXsSkzMVWLXpU0YEsME3f/exec', {
-        method: 'POST',
-        body: file
-    })
-    .then(response => response.text())
-    .then(data => {
-        document.getElementById("resultMessage").textContent = data;
-        document.getElementById("viewResultButton").style.display = "block";
-        loader.style.display = "none";
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        loader.style.display = "none";
-    });
+  const formData = new FormData();
+  formData.append('file', file);
+
+  loader.style.display = 'block';
+
+  fetch('https://script.google.com/macros/s/AKfycbw5U19DJy6Plkuuf1bY6OQZktK-iT4bBv_4rSM5KBhCOCERXsSkzMVWLXpU0YEsME3f/exec', {
+    method: 'POST',
+    body: formData
+  })
+  .then(response => response.json())
+  .then(data => {
+    loader.style.display = 'none';
+    alert("File uploaded successfully. Link: " + data.link);
+  })
+  .catch(error => {
+    loader.style.display = 'none';
+    alert("An error occurred: " + error.message);
+  });
 }
