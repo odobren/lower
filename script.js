@@ -1,42 +1,32 @@
-const form = document.getElementById('uploadForm');
-const fileInput = document.getElementById('fileInput');
-const loadingIcon = document.getElementById('loadingIcon');
+$(document).ready(function() {
+  $('#uploadForm').submit(function(e) {
+    e.preventDefault();
 
-async function uploadFile() {
-  const file = fileInput.files[0];
-  if (!file) {
-    alert('Please select a file.');
-    return;
-  }
+    var formData = new FormData();
+    var files = $('#fileInput')[0].files;
 
-  const formData = new FormData();
-  formData.append('file', file);
-
-  try {
-    showLoading();
-    const response = await fetch('https://script.google.com/macros/s/AKfycbw5U19DJy6Plkuuf1bY6OQZktK-iT4bBv_4rSM5KBhCOCERXsSkzMVWLXpU0YEsME3f/exec', {
-      method: 'POST',
-      body: formData
-    });
-    if (response.ok) {
-      alert('File uploaded successfully!');
-    } else {
-      alert('Failed to upload file.');
+    for (var i = 0; i < files.length; i++) {
+      formData.append('file', files[i]);
     }
-  } catch (error) {
-    console.error('Error:', error);
-    alert('An error occurred. Please try again later.');
-  } finally {
-    hideLoading();
-  }
-}
 
-function showLoading() {
-  form.style.display = 'none';
-  loadingIcon.style.display = 'block';
-}
+    $('#loading').show();
 
-function hideLoading() {
-  form.style.display = 'block';
-  loadingIcon.style.display = 'none';
-}
+    $.ajax({
+      url: 'https://script.google.com/macros/s/AKfycbw5U19DJy6Plkuuf1bY6OQZktK-iT4bBv_4rSM5KBhCOCERXsSkzMVWLXpU0YEsME3f/exec',
+      method: 'POST',
+      data: formData,
+      processData: false,
+      contentType: false,
+      success: function(response) {
+        $('#loading').hide();
+        $('#message').text('Файлы успешно загружены!');
+        $('#fileInput').val(''); // Clear the file input
+      },
+      error: function(xhr, status, error) {
+        console.error(xhr.responseText);
+        $('#loading').hide();
+        $('#message').text('Произошла ошибка при загрузке файлов.');
+      }
+    });
+  });
+});
