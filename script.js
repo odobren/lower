@@ -5,37 +5,33 @@ function uploadFile() {
     formData.append('file', file);
 
     const loader = document.getElementById('loader');
-    loader.style.display = 'block'; // Показываем анимированную загрузку
+    loader.style.display = "block"; // Показываем анимированную загрузку
 
-    fetch('https://script.google.com/macros/s/ВАШ_ИД_СКРИПТА/exec', {
+    fetch('https://script.google.com/macros/s/AKfycbw5U19DJy6Plkuuf1bY6OQZktK-iT4bBv_4rSM5KBhCOCERXsSkzMVWLXpU0YEsME3f/exec', {
         method: 'POST',
         body: formData
     })
-    .then(response => response.json())
+    .then(response => response.text())
     .then(data => {
-        const fileId = data.fileId;
-        const fileUrl = `https://drive.google.com/uc?id=${fileId}`;
+        document.getElementById("resultMessage").textContent = data;
 
-        // Копирование ссылки в Google Sheets
-        copyLinkToGoogleSheets(fileUrl);
+        // Получаем ссылку на файл на Google Диске
+        const fileUrl = data.trim(); // Предполагается, что скрипт возвращает только ссылку на файл
+        // Далее вы можете использовать эту ссылку для передачи ее в Google Sheets
+        appendToFileToGoogleSheets(fileUrl);
 
-        loader.style.display = 'none'; // Скрываем анимированную загрузку
+        // Останавливаем анимацию загрузки и показываем кнопку "Посмотреть результат"
+        document.getElementById("viewResultButton").style.display = "block";
+        loader.style.display = "none";
     })
     .catch(error => {
         console.error('Error:', error);
-        loader.style.display = 'none'; // Скрываем анимированную загрузку в случае ошибки
+        loader.style.display = "none"; // Скрываем анимированную загрузку в случае ошибки
     });
 }
 
-function copyLinkToGoogleSheets(fileUrl) {
-    const spreadsheetId = 'ВАШ_ID_ТАБЛИЦЫ';
-    const sheetName = 'Sheet1';
-    const range = 'A1'; // Куда скопировать ссылку
-
-    const valueRangeBody = {
-        'values': [
-            [fileUrl]
-        ]
-    };
-
-    const accessToken = 'ВАШ_ACCESS_TOKEN'; // Получите токен авторизации для доступа к Google Shee
+function appendToFileToGoogleSheets(fileUrl) {
+    // Код для добавления ссылки на файл в Google Sheets
+    // Это может потребовать использования Google Sheets API или других методов, 
+    // в зависимости от ваших требований и настроек вашего проекта.
+}
