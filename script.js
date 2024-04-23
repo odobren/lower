@@ -1,15 +1,15 @@
-document.getElementById('uploadBtn').addEventListener('click', uploadFile);
-
 function uploadFile() {
   const fileInput = document.getElementById('fileInput');
+  const loader = document.getElementById('loader');
+  const status = document.getElementById('status');
+
   const file = fileInput.files[0];
   if (!file) {
     alert('Please select a file.');
     return;
   }
 
-  // Display loader animation
-  document.getElementById('loader').style.display = 'block';
+  loader.style.display = 'block';
 
   const formData = new FormData();
   formData.append('file', file);
@@ -20,12 +20,19 @@ function uploadFile() {
   })
   .then(response => response.json())
   .then(data => {
-    document.getElementById('loader').style.display = 'none'; // Hide loader after upload
-    alert('File uploaded successfully!\nGoogle Sheets link: ' + data.link);
+    loader.style.display = 'none';
+    status.textContent = 'File uploaded successfully!';
+    const fileUrl = data.fileUrl;
+    addToGoogleSheets(fileUrl);
   })
   .catch(error => {
-    console.error('Error uploading file:', error);
-    alert('Error uploading file. Please try again.');
-    document.getElementById('loader').style.display = 'none'; // Hide loader on error
+    loader.style.display = 'none';
+    status.textContent = 'Error uploading file: ' + error.message;
   });
+}
+
+function addToGoogleSheets(fileUrl) {
+  const spreadsheetId = '132llDQJRFBF2dtuX16mF5t4p3v-Z6zgmL36uYh2H1wU';
+  const folderId = '1rVx0u2giWedD--e7slojv2617r8umpbO';
+  // You need to implement the code to add the file URL to Google Sheets using Apps Script
 }
