@@ -3,22 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>File Upload to Google Drive and Sheets</title>
-    <link rel="stylesheet" href="style.css">
+    <title>File Uploader</title>
+    <style>
+        /* Стили CSS */
+    </style>
 </head>
 <body>
-    <h1>Upload File to Google Drive and Sheets</h1>
+    <input type="file" id="fileInput">
+    <button onclick="uploadFile()">Upload</button>
+    <div id="loader" style="display: none;">Uploading...</div>
+    <div id="resultMessage"></div>
+    <button id="viewResultButton" style="display: none;">View Result</button>
 
-    <input type="file" id="fileInput" accept="*">
-    <button id="uploadButton">Upload</button>
+    <script>
+        // JavaScript код
+        function uploadFile() {
+            var fileInput = document.getElementById('fileInput');
+            var file = fileInput.files[0];
+            if (!file) {
+                alert("Please select a file.");
+                return;
+            }
 
-    <div id="loader" style="display: none;">
-        <img src="loader.gif" alt="Uploading...">
-    </div>
+            var formData = new FormData();
+            formData.append('file', file);
 
-    <div id="resultMessage" style="display: none;"></div>
-    <button id="viewResultButton" style="display: none;" onclick="openResultSheet()">View Result</button>
+            var loader = document.getElementById('loader');
+            loader.style.display = 'block';
 
-    <script src="script.js"></script>
+            fetch('https://script.google.com/macros/s/AKfycbw5U19DJy6Plkuuf1bY6OQZktK-iT4bBv_4rSM5KBhCOCERXsSkzMVWLXpU0YEsME3f/exec', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById("resultMessage").textContent = data;
+                document.getElementById("viewResultButton").style.display = "block";
+                loader.style.display = "none";
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                loader.style.display = "none";
+            });
+        }
+    </script>
 </body>
 </html>
