@@ -1,16 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>File Upload</title>
-    <link rel="stylesheet" href="styles.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Upload File</title>
+<style>
+.loader {
+  border: 16px solid #f3f3f3; /* Light grey */
+  border-top: 16px solid #3498db; /* Blue */
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+</style>
 </head>
 <body>
-    <input type="file" id="fileInput">
-    <button onclick="uploadFile()">Upload File</button>
-    <div id="loader" class="loader"></div>
-    <div id="resultMessage"></div>
-    <script src="script.js"></script>
+<input type="file" id="fileInput">
+<button onclick="uploadFile()">Upload File</button>
+<div id="loader" class="loader" style="display:none"></div>
+<script>
+function uploadFile() {
+  var fileInput = document.getElementById('fileInput');
+  var file = fileInput.files[0];
+  var formData = new FormData();
+  formData.append('file', file);
+
+  var loader = document.getElementById('loader');
+  loader.style.display = 'block';
+
+  fetch('https://script.google.com/macros/s/AKfycbw5U19DJy6Plkuuf1bY6OQZktK-iT4bBv_4rSM5KBhCOCERXsSkzMVWLXpU0YEsME3f/exec', {
+    method: 'POST',
+    body: formData
+  })
+  .then(response => response.text())
+  .then(data => {
+    // Получаем ссылку на файл и обновляем Google Sheets
+    updateGoogleSheets(data);
+    loader.style.display = 'none';
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    loader.style.display = 'none';
+  });
+}
+
+function updateGoogleSheets(fileUrl) {
+  // Ваш код для обновления Google Sheets
+  console.log('File URL:', fileUrl);
+}
+</script>
 </body>
 </html>
