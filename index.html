@@ -1,57 +1,48 @@
-<!-- HTML страница (index.html) -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>File Upload</title>
-  <!-- Подключаем библиотеку jQuery -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <title>Upload File</title>
 </head>
 <body>
-  <h1>Upload File</h1>
-  <!-- Форма загрузки файла -->
-  <form id="uploadForm" enctype="multipart/form-data">
-    <input type="file" id="fileInput" accept=".pdf, .png" required>
+  <form id="uploadForm">
+    <input type="file" id="fileInput" name="file" accept=".pdf,.png" required>
     <button type="submit">Upload</button>
   </form>
-  <!-- Анимация загрузки -->
-  <div id="loader" style="display: none;">
-    <img src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/images/loader-large.gif" alt="Loading...">
+
+  <div id="loading" style="display: none;">
+    Uploading... <img src="loading.gif" alt="loading">
   </div>
+
+  <div id="message"></div>
+
   <script>
-    $(document).ready(function() {
-      // Обработка отправки формы
-      $('#uploadForm').submit(function(e) {
-        e.preventDefault();
-        var formData = new FormData();
-        var file = $('#fileInput')[0].files[0];
-        formData.append('file', file);
-        formData.append('fileType', file.type);
-
-        // Показываем анимацию загрузки
-        $('#loader').show();
-
-        // Отправляем файл на сервер
-        $.ajax({
-          url: 'https://script.google.com/macros/s/AKfycbw5U19DJy6Plkuuf1bY6OQZktK-iT4bBv_4rSM5KBhCOCERXsSkzMVWLXpU0YEsME3f/exec',
-          type: 'POST',
-          data: formData,
-          processData: false,
-          contentType: false,
-          success: function(response) {
-            // Скрываем анимацию загрузки и выводим сообщение об успешной загрузке
-            $('#loader').hide();
-            alert(response);
-          },
-          error: function(xhr, status, error) {
-            // Скрываем анимацию загрузки и выводим сообщение об ошибке
-            $('#loader').hide();
-            alert('Error uploading file');
-            console.error(error);
-          }
-        });
-      });
+    document.getElementById('uploadForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      
+      var form = event.target;
+      var formData = new FormData(form);
+      
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', 'https://script.google.com/macros/s/AKfycbw5U19DJy6Plkuuf1bY6OQZktK-iT4bBv_4rSM5KBhCOCERXsSkzMVWLXpU0YEsME3f/exec');
+      
+      xhr.onloadstart = function() {
+        document.getElementById('loading').style.display = 'block';
+      };
+      
+      xhr.onload = function() {
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('message').textContent = xhr.responseText;
+        form.reset();
+      };
+      
+      xhr.onerror = function() {
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('message').textContent = 'Error uploading file';
+      };
+      
+      xhr.send(formData);
     });
   </script>
 </body>
