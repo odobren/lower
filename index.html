@@ -1,17 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>File Upload</title>
-    <link rel="stylesheet" href="styles.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>File Upload</title>
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
+<div class="container">
     <input type="file" id="fileInput">
-    <button id="uploadButton">Upload File</button>
-    <div id="loader" class="loader"></div>
-    <div id="resultMessage"></div>
-
-    <script src="script.js"></script>
+    <button onclick="uploadFile()">Upload</button>
+</div>
+<div id="loader" class="loader"></div>
+<div id="resultMessage"></div>
+<script src="script.js"></script>
 </body>
 </html>
