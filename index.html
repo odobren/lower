@@ -1,51 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>File Uploader</title>
-    <style>
-        /* Стили CSS */
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Загрузка файла на Google Диск</title>
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <input type="file" id="fileInput">
-    <button onclick="uploadFile()">Upload</button>
-    <div id="loader" style="display: none;">Uploading...</div>
-    <div id="resultMessage"></div>
-    <button id="viewResultButton" style="display: none;">View Result</button>
-
-    <script>
-        // JavaScript код
-        function uploadFile() {
-            var fileInput = document.getElementById('fileInput');
-            var file = fileInput.files[0];
-            if (!file) {
-                alert("Please select a file.");
-                return;
-            }
-
-            var formData = new FormData();
-            formData.append('file', file);
-
-            var loader = document.getElementById('loader');
-            loader.style.display = 'block';
-
-            fetch('https://script.google.com/macros/s/AKfycbw5U19DJy6Plkuuf1bY6OQZktK-iT4bBv_4rSM5KBhCOCERXsSkzMVWLXpU0YEsME3f/exec', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById("resultMessage").textContent = data;
-                document.getElementById("viewResultButton").style.display = "block";
-                loader.style.display = "none";
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                loader.style.display = "none";
-            });
-        }
-    </script>
+<div class="container">
+  <h1>Загрузка файла на Google Диск</h1>
+  <input type="file" id="fileInput">
+  <button onclick="uploadFile()">Загрузить файл</button>
+  <div id="loader" class="loader"></div>
+  <p id="resultMessage"></p>
+  <a id="viewResultButton" href="#" target="_blank" style="display: none;">Посмотреть результат</a>
+</div>
+<script src="script.js"></script>
 </body>
 </html>
