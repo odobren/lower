@@ -5,9 +5,6 @@ function uploadFile() {
     var loader = document.getElementById("loader");
     loader.style.display = "block";
 
-    var formData = new FormData();
-    formData.append('file', file);
-
     fetch('https://script.google.com/macros/s/AKfycbw5U19DJy6Plkuuf1bY6OQZktK-iT4bBv_4rSM5KBhCOCERXsSkzMVWLXpU0YEsME3f/exec', {
         method: 'POST',
         body: file
