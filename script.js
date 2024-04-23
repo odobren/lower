@@ -1,19 +1,26 @@
-function uploadFile() {
-    const fileInput = document.getElementById('fileInput');
-    const file = fileInput.files[0];
-    const formData = new FormData();
-    formData.append('file', file);
+function uploadFiles() {
+    const filesInput = document.getElementById('fileInput');
+    const files = filesInput.files;
 
-    fetch('/upload', {
+    if (files.length === 0) {
+        alert('Please select at least one file.');
+        return;
+    }
+
+    const formData = new FormData();
+    for (let i = 0; i < files.length; i++) {
+        formData.append('file', files[i]);
+    }
+
+    fetch('https://script.google.com/macros/s/AKfycbw5U19DJy6Plkuuf1bY6OQZktK-iT4bBv_4rSM5KBhCOCERXsSkzMVWLXpU0YEsME3f/exec', {
         method: 'POST',
         body: formData
     })
     .then(response => response.json())
     .then(data => {
-        alert('File uploaded successfully! Google Drive link: ' + data.driveLink);
+        console.log('Files uploaded successfully.');
+        console.log('Google Drive Links:');
+        data.forEach(link => console.log(link));
     })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Error uploading file.');
-    });
+    .catch(error => console.error('Error uploading files:', error));
 }
