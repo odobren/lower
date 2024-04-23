@@ -20,10 +20,14 @@ document.getElementById('uploadForm').addEventListener('submit', function(event)
       fileInput.value = ''; // Clear the file input
     } else {
       alert('Failed to upload file.');
+      document.getElementById('uploadButton').removeAttribute('disabled');
+      document.getElementById('loading').classList.remove('active');
     }
   })
   .catch(error => {
     console.error('Error:', error);
     alert('An error occurred. Please try again later.');
+    document.getElementById('uploadButton').removeAttribute('disabled');
+    document.getElementById('loading').classList.remove('active');
   });
 });
