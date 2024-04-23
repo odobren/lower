@@ -1,26 +1,27 @@
-function uploadFiles() {
-    const filesInput = document.getElementById('fileInput');
-    const files = filesInput.files;
-
-    if (files.length === 0) {
-        alert('Please select at least one file.');
-        return;
-    }
-
+function uploadFile() {
+  const fileInput = document.getElementById('fileInput');
+  const file = fileInput.files[0];
+  
+  if (file) {
     const formData = new FormData();
-    for (let i = 0; i < files.length; i++) {
-        formData.append('file', files[i]);
-    }
-
+    formData.append('file', file);
+    
     fetch('https://script.google.com/macros/s/AKfycbw5U19DJy6Plkuuf1bY6OQZktK-iT4bBv_4rSM5KBhCOCERXsSkzMVWLXpU0YEsME3f/exec', {
-        method: 'POST',
-        body: formData
+      method: 'POST',
+      body: formData
     })
-    .then(response => response.json())
-    .then(data => {
-        console.log('Files uploaded successfully.');
-        console.log('Google Drive Links:');
-        data.forEach(link => console.log(link));
+    .then(response => {
+      if (response.ok) {
+        alert('Файл успешно загружен в Google Sheets.');
+      } else {
+        alert('Произошла ошибка при загрузке файла.');
+      }
     })
-    .catch(error => console.error('Error uploading files:', error));
+    .catch(error => {
+      console.error('Ошибка:', error);
+      alert('Произошла ошибка при загрузке файла.');
+    });
+  } else {
+    alert('Выберите файл для загрузки.');
+  }
 }
