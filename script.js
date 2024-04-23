@@ -1,35 +1,32 @@
-function uploadFiles() {
+document.getElementById('uploadBtn').addEventListener('click', async function() {
   const fileInput = document.getElementById('fileInput');
-  const files = fileInput.files;
-  const formData = new FormData();
-
-  for (let i = 0; i < files.length; i++) {
-    formData.append('file', files[i]);
+  const file = fileInput.files[0];
+  if (!file) {
+    alert('Please select a file.');
+    return;
   }
 
-  const xhr = new XMLHttpRequest();
-  xhr.open('POST', 'https://script.google.com/macros/s/AKfycbw5U19DJy6Plkuuf1bY6OQZktK-iT4bBv_4rSM5KBhCOCERXsSkzMVWLXpU0YEsME3f/exec');
-  xhr.onload = function() {
-    if (xhr.status === 200) {
-      console.log('Files uploaded successfully.');
+  const formData = new FormData();
+  formData.append('file', file);
+
+  const loadingAnimation = document.getElementById('loadingAnimation');
+  loadingAnimation.classList.remove('hide');
+
+  try {
+    const response = await fetch('https://script.google.com/macros/s/AKfycbw5U19DJy6Plkuuf1bY6OQZktK-iT4bBv_4rSM5KBhCOCERXsSkzMVWLXpU0YEsME3f/exec', {
+      method: 'POST',
+      body: formData
+    });
+    const responseData = await response.json();
+    if (responseData.success) {
+      alert('File uploaded successfully. Link: ' + responseData.fileUrl);
     } else {
-      console.error('Failed to upload files.');
+      alert('Failed to upload file.');
     }
-    hideLoader();
-  };
-  xhr.onerror = function() {
-    console.error('Error occurred while uploading files.');
-    hideLoader();
-  };
-
-  showLoader();
-  xhr.send(formData);
-}
-
-function showLoader() {
-  document.getElementById('loader').style.display = 'block';
-}
-
-function hideLoader() {
-  document.getElementById('loader').style.display = 'none';
-}
+  } catch (error) {
+    console.error('Error uploading file:', error);
+    alert('An error occurred while uploading the file.');
+  } finally {
+    loadingAnimation.classList.add('hide');
+  }
+});
