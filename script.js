@@ -1,32 +1,35 @@
 function uploadFile() {
-  var fileInput = document.getElementById('fileInput');
-  var file = fileInput.files[0];
-  var formData = new FormData();
-  formData.append('file', file);
-
-  var data = {
-    // Дополнительные данные, которые вы хотите отправить
-    // Например: имя пользователя, дата, и т.д.
-    // Замените на нужные вам данные
-    username: "John Doe",
-    date: new Date().toLocaleDateString()
-  };
-
-  formData.append('data', JSON.stringify(data));
-
-  fetch('https://script.google.com/macros/s/AKfycbw5U19DJy6Plkuuf1bY6OQZktK-iT4bBv_4rSM5KBhCOCERXsSkzMVWLXpU0YEsME3f/exec', {
-    method: 'POST',
-    body: formData
-  })
-  .then(response => {
-    if (response.ok) {
-      console.log('File uploaded successfully');
-      // Дополнительные действия после успешной загрузки
-    } else {
-      console.error('Error uploading file');
+    var fileInput = document.getElementById('fileInput');
+    var file = fileInput.files[0];
+    
+    if (!file) {
+        alert("Please select a file.");
+        return;
     }
-  })
-  .catch(error => {
-    console.error('Error uploading file:', error);
-  });
+
+    var formData = new FormData();
+    formData.append("file", file);
+
+    var loader = document.getElementById('loader');
+    loader.style.display = "block";
+
+    fetch('https://script.google.com/macros/s/AKfycbw5U19DJy6Plkuuf1bY6OQZktK-iT4bBv_4rSM5KBhCOCERXsSkzMVWLXpU0YEsME3f/exec', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.text();
+    })
+    .then(data => {
+        alert('File uploaded successfully!');
+        loader.style.display = "none";
+    })
+    .catch(error => {
+        alert('There was a problem with your upload. Please try again later.');
+        loader.style.display = "none";
+        console.error('There was an error!', error);
+    });
 }
