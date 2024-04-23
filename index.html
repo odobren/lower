@@ -1,44 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>File Upload</title>
-<link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Upload to Google Drive and Sheets</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="container">
-    <input type="file" id="fileInput">
-    <button onclick="uploadFile()">Upload</button>
-</div>
-<div id="loader" class="loader"></div>
-<div id="resultMessage"></div>
-<script src="script.js"></script>
-<script>
-function uploadFile() {
-    var fileInput = document.getElementById('fileInput');
-    var file = fileInput.files[0];
-    var formData = new FormData();
-    formData.append('file', file); // Обратите внимание на имя поля 'file', это должно соответствовать ожидаемому параметру в вашем скрипте на Google Apps Script
+    <h1>Upload File to Google Drive and Sheets</h1>
 
-    var loader = document.getElementById('loader');
-    loader.style.display = 'block';
+    <input type="file" id="fileInput" accept="*">
+    <button id="uploadButton">Upload</button>
 
-    fetch('https://script.google.com/macros/s/AKfycbw5U19DJy6Plkuuf1bY6OQZktK-iT4bBv_4rSM5KBhCOCERXsSkzMVWLXpU0YEsME3f/exec', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.text())
-    .then(data => {
-        document.getElementById('resultMessage').textContent = data;
-        loader.style.display = 'none';
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        document.getElementById('resultMessage').textContent = 'An error occurred while uploading the file.';
-        loader.style.display = 'none';
-    });
-}
-</script>
+    <div id="loader" style="display: none;">
+        <img src="loader.gif" alt="Uploading...">
+    </div>
+
+    <div id="resultMessage" style="display: none;"></div>
+    <button id="viewResultButton" style="display: none;" onclick="openResultSheet()">View Result</button>
+
+    <script src="script.js"></script>
 </body>
 </html>
