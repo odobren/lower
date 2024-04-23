@@ -18,3 +18,8 @@ button {
 button:hover {
   background-color: #0056b3;
 }
+
+#loader {
+    display: none;
+    /* Add your loader styles here */
+}
