@@ -1,31 +1,36 @@
-const fileInput = document.getElementById('fileInput');
-const uploadButton = document.getElementById('uploadButton');
-const loadingContainer = document.getElementById('loadingContainer');
+document.getElementById('uploadButton').addEventListener('click', uploadFile);
 
-uploadButton.addEventListener('click', () => {
-    const files = fileInput.files;
+function uploadFile() {
+  var fileInput = document.getElementById('fileInput');
+  var file = fileInput.files[0];
 
-    if (files.length > 0) {
-        loadingContainer.style.display = 'block';
+  if (file) {
+    var formData = new FormData();
+    formData.append('file', file);
 
-        const formData = new FormData();
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'https://script.google.com/macros/s/AKfycbw5U19DJy6Plkuuf1bY6OQZktK-iT4bBv_4rSM5KBhCOCERXsSkzMVWLXpU0YEsME3f/exec');
+    
+    xhr.upload.onloadstart = function() {
+      document.getElementById('loader').style.display = 'block';
+    };
 
-        for (const file of files) {
-            formData.append('file', file);
+    xhr.upload.onloadend = function() {
+      document.getElementById('loader').style.display = 'none';
+    };
+
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState == XMLHttpRequest.DONE) {
+        if (xhr.status == 200) {
+          alert('File uploaded successfully!');
+        } else {
+          alert('Error uploading file. Please try again.');
         }
+      }
+    };
 
-        fetch('https://script.google.com/macros/s/AKfycbw5U19DJy6Plkuuf1bY6OQZktK-iT4bBv_4rSM5KBhCOCERXsSkzMVWLXpU0YEsME3f/exec', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log(data);
-            loadingContainer.style.display = 'none';
-        })
-        .catch(error => {
-            console.error(error);
-            loadingContainer.style.display = 'none';
-        });
-    }
-});
+    xhr.send(formData);
+  } else {
+    alert('Please select a file to upload.');
+  }
+}
