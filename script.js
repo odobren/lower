@@ -1,15 +1,11 @@
-document.getElementById('uploadButton').addEventListener('click', function() {
+function uploadFile() {
     var fileInput = document.getElementById('fileInput');
-    var files = fileInput.files;
+    var file = fileInput.files[0];
     var formData = new FormData();
+    formData.append('file', file);
 
-    for (var i = 0; i < files.length; i++) {
-        var file = files[i];
-        formData.append('file', file);
-    }
-
-    var loader = document.getElementById('loader');
-    loader.style.display = 'block';
+    var loader = document.getElementById("loader");
+    loader.style.display = "block";
 
     fetch('https://script.google.com/macros/s/AKfycbw5U19DJy6Plkuuf1bY6OQZktK-iT4bBv_4rSM5KBhCOCERXsSkzMVWLXpU0YEsME3f/exec', {
         method: 'POST',
@@ -17,12 +13,12 @@ document.getElementById('uploadButton').addEventListener('click', function() {
     })
     .then(response => response.text())
     .then(data => {
-        document.getElementById('resultMessage').textContent = data;
-        document.getElementById('viewResultButton').style.display = 'block';
-        loader.style.display = 'none';
+        document.getElementById("resultMessage").textContent = data;
+        document.getElementById("viewResultButton").style.display = "block";
+        loader.style.display = "none";
     })
     .catch(error => {
         console.error('Error:', error);
-        loader.style.display = 'none';
+        loader.style.display = "none";
     });
-});
+}
