@@ -6,7 +6,7 @@ document.getElementById('uploadButton').addEventListener('click', function() {
         formData.append('file', file);
 
         var loader = document.getElementById('loader');
-        loader.style.display = 'block'; // Show loader animation
+        loader.style.display = 'block'; // Показываем анимацию загрузки
 
         fetch('https://script.google.com/macros/s/AKfycbw5U19DJy6Plkuuf1bY6OQZktK-iT4bBv_4rSM5KBhCOCERXsSkzMVWLXpU0YEsME3f/exec', {
             method: 'POST',
@@ -14,38 +14,19 @@ document.getElementById('uploadButton').addEventListener('click', function() {
         })
         .then(response => response.text())
         .then(data => {
-            document.getElementById('resultMessage').textContent = 'File uploaded successfully. Link: ' + data;
-            loader.style.display = 'none'; // Hide loader animation
-            saveLinkToGoogleSheet(data);
+            // Обновляем Google Sheets с полученной ссылкой на файл
+            updateGoogleSheets(data);
+            loader.style.display = 'none'; // Скрываем анимацию загрузки после завершения
         })
         .catch(error => {
             console.error('Error:', error);
-            loader.style.display = 'none'; // Hide loader animation
-            document.getElementById('resultMessage').textContent = 'An error occurred while uploading the file.';
+            loader.style.display = 'none'; // Скрываем анимацию загрузки в случае ошибки
         });
-    } else {
-        alert('Please select a file to upload.');
     }
 });
 
-function saveLinkToGoogleSheet(link) {
+function updateGoogleSheets(fileUrl) {
     var spreadsheetId = '132llDQJRFBF2dtuX16mF5t4p3v-Z6zgmL36uYh2H1wU';
-    var url = 'https://script.google.com/macros/s/AKfycbxqg9ZQYGJqKJOkSzzHefZcMoxE_hWU82rND8GRWbb5K03E0U_4/exec';
-    var payload = {
-        link: link
-    };
-
-    fetch(url + '?spreadsheetId=' + spreadsheetId, {
-        method: 'POST',
-        body: JSON.stringify(payload),
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-    .then(response => {
-        console.log('Link saved to Google Sheets.');
-    })
-    .catch(error => {
-        console.error('Error:', error);
-    });
+    var folderId = '1rVx0u2giWedD--e7slojv2617r8umpbO';
+    // Допишите код для обновления Google Sheets с полученной ссылкой на файл
 }
