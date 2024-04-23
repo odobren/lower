@@ -1,22 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Загрузка файлов</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Upload</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <form id="uploadForm" enctype="multipart/form-data">
-    <input type="file" id="fileInput" accept=".pdf,.png" multiple>
-    <button type="submit">Загрузить файлы</button>
-  </form>
-  <div id="loading" style="display: none;">
-    <i class="fas fa-spinner fa-spin"></i> Загрузка...
-  </div>
-  <div id="message"></div>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-  <script src="script.js"></script>
+    <input type="file" id="fileInput" accept=".pdf,.png">
+    <button id="uploadBtn">Upload</button>
+    <div id="loader" class="loader"></div>
+    <script src="script.js"></script>
 </body>
 </html>
