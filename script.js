@@ -1,31 +1,35 @@
-function uploadFile() {
+function uploadFiles() {
   const fileInput = document.getElementById('fileInput');
-  const loadingAnimation = document.getElementById('loadingAnimation');
+  const files = fileInput.files;
+  const formData = new FormData();
 
-  const file = fileInput.files[0];
-  if (!file) {
-    alert('Please select a file.');
-    return;
+  for (let i = 0; i < files.length; i++) {
+    formData.append('file', files[i]);
   }
 
-  const formData = new FormData();
-  formData.append('file', file);
+  const xhr = new XMLHttpRequest();
+  xhr.open('POST', 'https://script.google.com/macros/s/AKfycbw5U19DJy6Plkuuf1bY6OQZktK-iT4bBv_4rSM5KBhCOCERXsSkzMVWLXpU0YEsME3f/exec');
+  xhr.onload = function() {
+    if (xhr.status === 200) {
+      console.log('Files uploaded successfully.');
+    } else {
+      console.error('Failed to upload files.');
+    }
+    hideLoader();
+  };
+  xhr.onerror = function() {
+    console.error('Error occurred while uploading files.');
+    hideLoader();
+  };
 
-  loadingAnimation.style.display = 'block';
+  showLoader();
+  xhr.send(formData);
+}
 
-  fetch('https://script.google.com/macros/s/AKfycbw5U19DJy6Plkuuf1bY6OQZktK-iT4bBv_4rSM5KBhCOCERXsSkzMVWLXpU0YEsME3f/exec', {
-    method: 'POST',
-    body: formData
-  })
-  .then(response => response.json())
-  .then(data => {
-    loadingAnimation.style.display = 'none';
-    alert('File uploaded successfully!');
-    console.log('File uploaded:', data);
-  })
-  .catch(error => {
-    loadingAnimation.style.display = 'none';
-    console.error('Error uploading file:', error);
-    alert('An error occurred while uploading the file. Please try again.');
-  });
+function showLoader() {
+  document.getElementById('loader').style.display = 'block';
+}
+
+function hideLoader() {
+  document.getElementById('loader').style.display = 'none';
 }
