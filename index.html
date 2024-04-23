@@ -1,35 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>File Upload</title>
-    <style>
-        #loading {
-            display: none;
-            width: 50px;
-            height: 50px;
-            background-color: #ccc;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            border-radius: 50%;
-            border: 3px solid #fff;
-            border-top: 3px solid #ff5733;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: translate(-50%, -50%) rotate(0deg); }
-            100% { transform: translate(-50%, -50%) rotate(360deg); }
-        }
-    </style>
+    <title>Загрузка файлов в Google Sheets</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <input type="file" id="fileInput">
-    <button onclick="uploadFile()">Upload File</button>
-    <div id="loading"></div>
-    <script src="upload.js"></script>
+    <h1>Загрузка файлов в Google Sheets</h1>
+
+    <div id="file-input-container">
+        <input type="file" id="file-input" multiple>
+        <button id="upload-button">Загрузить</button>
+    </div>
+
+    <div id="loading-container" style="display: none;">
+        <div class="loader"></div>
+        <p>Загрузка...</p>
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>
