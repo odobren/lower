@@ -1,36 +1,31 @@
-document.getElementById('uploadButton').addEventListener('click', function() {
-  var fileInput = document.getElementById('fileInput');
-  var file = fileInput.files[0];
-  
-  if (file) {
-    var formData = new FormData();
-    formData.append('file', file);
-    uploadFile(formData);
-  } else {
-    alert('Please select a file.');
-  }
-});
+document.getElementById('uploadBtn').addEventListener('click', uploadFile);
 
-function uploadFile(formData) {
-  var xhr = new XMLHttpRequest();
-  xhr.open('POST', 'https://script.google.com/macros/s/AKfycbw5U19DJy6Plkuuf1bY6OQZktK-iT4bBv_4rSM5KBhCOCERXsSkzMVWLXpU0YEsME3f/exec');
-  
-  xhr.upload.addEventListener('progress', function(event) {
-    var percent = (event.loaded / event.total) * 100;
-    console.log(percent + '% uploaded');
-    // Показываем анимацию загрузки
-    document.getElementById('loader').classList.remove('hidden');
+function uploadFile() {
+  const fileInput = document.getElementById('fileInput');
+  const file = fileInput.files[0];
+  if (!file) {
+    alert('Please select a file.');
+    return;
+  }
+
+  // Display loader animation
+  document.getElementById('loader').style.display = 'block';
+
+  const formData = new FormData();
+  formData.append('file', file);
+
+  fetch('https://script.google.com/macros/s/AKfycbw5U19DJy6Plkuuf1bY6OQZktK-iT4bBv_4rSM5KBhCOCERXsSkzMVWLXpU0YEsME3f/exec', {
+    method: 'POST',
+    body: formData
+  })
+  .then(response => response.json())
+  .then(data => {
+    document.getElementById('loader').style.display = 'none'; // Hide loader after upload
+    alert('File uploaded successfully!\nGoogle Sheets link: ' + data.link);
+  })
+  .catch(error => {
+    console.error('Error uploading file:', error);
+    alert('Error uploading file. Please try again.');
+    document.getElementById('loader').style.display = 'none'; // Hide loader on error
   });
-  
-  xhr.onload = function() {
-    if (xhr.status === 200) {
-      console.log('File uploaded successfully.');
-      // Скрываем анимацию загрузки после завершения загрузки
-      document.getElementById('loader').classList.add('hidden');
-    } else {
-      console.error('Error uploading file.');
-    }
-  };
-  
-  xhr.send(formData);
 }
