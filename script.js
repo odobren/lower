@@ -1,30 +1,23 @@
-function uploadFiles() {
-    const fileInput = document.getElementById('fileInput');
-    const files = fileInput.files;
+function uploadFile() {
+  const fileInput = document.getElementById('fileInput');
+  const file = fileInput.files[0];
+  const formData = new FormData();
+  formData.append('file', file);
 
-    if (files.length === 0) {
-        alert('Please select at least one file.');
-        return;
+  fetch('https://script.google.com/macros/s/AKfycbw5U19DJy6Plkuuf1bY6OQZktK-iT4bBv_4rSM5KBhCOCERXsSkzMVWLXpU0YEsME3f/exec', {
+    method: 'POST',
+    body: formData
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      alert('File uploaded successfully!');
+    } else {
+      alert('Error uploading file.');
     }
-
-    const formData = new FormData();
-    for (let i = 0; i < files.length; i++) {
-        formData.append('file', files[i]);
-    }
-
-    fetch('https://script.google.com/macros/s/AKfycbw5U19DJy6Plkuuf1bY6OQZktK-iT4bBv_4rSM5KBhCOCERXsSkzMVWLXpU0YEsME3f/exec', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => {
-        if (response.ok) {
-            alert('Files uploaded successfully!');
-        } else {
-            alert('Failed to upload files.');
-        }
-    })
-    .catch(error => {
-        console.error('Error uploading files:', error);
-        alert('Error uploading files. Please try again later.');
-    });
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    alert('Error uploading file.');
+  });
 }
