@@ -1,23 +1,41 @@
 function uploadFile() {
-    var fileInput = document.getElementById('fileInput');
-    var file = fileInput.files[0];
-    var formData = new FormData();
+    const fileInput = document.getElementById('fileInput');
+    const file = fileInput.files[0];
+    const formData = new FormData();
     formData.append('file', file);
 
-    var loader = document.getElementById('loader');
-    loader.style.display = 'block';
+    const loader = document.getElementById('loader');
+    loader.style.display = 'block'; // Показываем анимированную загрузку
 
-    fetch('https://script.google.com/macros/s/ТВОЙ_ИД_СКРИПТА/exec', {
+    fetch('https://script.google.com/macros/s/ВАШ_ИД_СКРИПТА/exec', {
         method: 'POST',
         body: formData
     })
-    .then(response => response.text())
+    .then(response => response.json())
     .then(data => {
-        console.log('File uploaded successfully:', data);
-        loader.style.display = 'none';
+        const fileId = data.fileId;
+        const fileUrl = `https://drive.google.com/uc?id=${fileId}`;
+
+        // Копирование ссылки в Google Sheets
+        copyLinkToGoogleSheets(fileUrl);
+
+        loader.style.display = 'none'; // Скрываем анимированную загрузку
     })
     .catch(error => {
-        console.error('Error uploading file:', error);
-        loader.style.display = 'none';
+        console.error('Error:', error);
+        loader.style.display = 'none'; // Скрываем анимированную загрузку в случае ошибки
     });
 }
+
+function copyLinkToGoogleSheets(fileUrl) {
+    const spreadsheetId = 'ВАШ_ID_ТАБЛИЦЫ';
+    const sheetName = 'Sheet1';
+    const range = 'A1'; // Куда скопировать ссылку
+
+    const valueRangeBody = {
+        'values': [
+            [fileUrl]
+        ]
+    };
+
+    const accessToken = 'ВАШ_ACCESS_TOKEN'; // Получите токен авторизации для доступа к Google Shee
