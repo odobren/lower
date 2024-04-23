@@ -19,7 +19,8 @@ async function uploadFile() {
       body: formData
     });
     if (response.ok) {
-      alert('File uploaded successfully!');
+      const result = await response.text();
+      alert(result);
     } else {
       alert('Failed to upload file.');
     }
