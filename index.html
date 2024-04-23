@@ -1,19 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>File Upload</title>
-<link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>File Upload</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<div class="container">
-  <h2>Upload File</h2>
-  <input type="file" id="fileInput" accept=".xlsx, .xls, .csv">
-  <button id="uploadButton">Upload</button>
-  <div id="loader" class="loader"></div>
-</div>
-
-<script src="script.js"></script>
+  <input type="file" id="fileInput" accept=".csv,.xlsx,.xls">
+  <button id="uploadButton">Upload File</button>
+  <div id="loader" class="hidden"></div>
+  <script src="script.js"></script>
 </body>
 </html>
