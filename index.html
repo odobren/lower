@@ -1,43 +1,92 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
-  <title>Загрузка файлов</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Загрузка файла на сервер</title>
+  <!-- Подключаем библиотеку для стилизации элементов формы -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css">
+  <style>
+    /* Дополнительные стили */
+    .container {
+      margin-top: 50px;
+    }
+  </style>
 </head>
 <body>
-  <input type="file" id="fileInput">
-  <button onclick="uploadFile()">Загрузить</button>
-  <div id="progress"></div>
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-half">
+        <h1 class="title is-4">Загрузка файла на сервер</h1>
+        <form id="form">
+          <div class="field">
+            <div class="file is-info has-name">
+              <label class="file-label">
+                <input class="file-input" type="file" name="file" id="uploadfile">
+                <span class="file-cta">
+                  <span class="file-icon">
+                    <i class="fas fa-upload"></i>
+                  </span>
+                  <span class="file-label">
+                    Выбрать файл…
+                  </span>
+                </span>
+                <span class="file-name" id="filename">
+                  Нет выбранного файла
+                </span>
+              </label>
+            </div>
+          </div>
+          <div class="field">
+            <div class="control">
+              <button class="button is-primary" id="submit">
+                Загрузить
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-md5/2.18.0/js/md5.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha256/0.9.0/sha256.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+  <!-- Подключаем библиотеку Font Awesome для иконок -->
+  <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+
   <script>
-    function uploadFile() {
-      var fileInput = document.getElementById('fileInput');
-      var file = fileInput.files[0];
-      var reader = new FileReader();
+    const form = document.getElementById("form");
+    const filenameDisplay = document.getElementById("filename");
 
-      reader.onload = function(event) {
-        var filename = file.name;
-        var mimeType = file.type;
-        var bytes = event.target.result.split(',')[1];
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const file = form.file.files[0];
+      const fr = new FileReader();
+      fr.readAsArrayBuffer(file);
+      fr.onload = (f) => {
+        const url = "https://script.google.com/macros/s/AKfycby_nWolfRgCK08OSMKYDre2QjFgEwb6lP4TpII3vkFrpfGerqVEehf-3civmmB_-807/exec"; // URL вашего веб-приложения
 
-        $.post("https://script.google.com/macros/s/AKfycbw5U19DJy6Plkuuf1bY6OQZktK-iT4bBv_4rSM5KBhCOCERXsSkzMVWLXpU0YEsME3f/exec", {
-          filename: filename,
-          mimeType: mimeType,
-          bytes: bytes
-        }, function(data, status) {
-          if (data.success) {
-            alert("Файл успешно загружен");
-          } else {
-            alert("Произошла ошибка при загрузке файла");
-          }
+        const qs = new URLSearchParams({
+          filename: file.name,
+          mimeType: file.type,
         });
+        fetch(`${url}?${qs}`, {
+          method: "POST",
+          body: JSON.stringify([...new Int8Array(f.target.result)]),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            alert("Файл успешно загружен!");
+            // Сбросить значение выбранного файла после загрузки
+            filenameDisplay.textContent = "Нет выбранного файла";
+            form.reset();
+          })
+          .catch(console.log);
       };
+    });
 
-      reader.readAsDataURL(file);
-    }
+    // Показать имя выбранного файла после выбора
+    document.getElementById("uploadfile").addEventListener("change", function () {
+      filenameDisplay.textContent = this.files[0].name;
+    });
   </script>
 </body>
 </html>
