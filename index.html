@@ -1,92 +1,137 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Загрузка файла на сервер</title>
-  <!-- Подключаем библиотеку для стилизации элементов формы -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css">
-  <style>
-    /* Дополнительные стили */
-    .container {
-      margin-top: 50px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Адаптивная форма</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Добавляем стиль для скрытия элементов */
+        #fullName,
+        label[for="fullName"],
+        #date,
+        label[for="date"] {
+            display: none;
+        }
+
+        /* Адаптация для мобильных устройств */
+        @media screen and (max-width: 600px) {
+            .container {
+                padding: 20px; /* Добавляем отступы для удобного отображения на мобильных */
+            }
+
+            .form-group {
+                margin-bottom: 15px; /* Уменьшаем отступы между полями */
+            }
+
+            input[type="text"],
+            input[type="email"],
+            input[type="tel"],
+            input[type="date"] {
+                width: 100%; /* Растягиваем поля ввода на всю ширину */
+            }
+
+            button {
+                width: 100%; /* Растягиваем кнопки на всю ширину */
+            }
+          
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <div class="columns is-centered">
-      <div class="column is-half">
-        <h1 class="title is-4">Загрузка файла на сервер</h1>
-        <form id="form">
-          <div class="field">
-            <div class="file is-info has-name">
-              <label class="file-label">
-                <input class="file-input" type="file" name="file" id="uploadfile">
-                <span class="file-cta">
-                  <span class="file-icon">
-                    <i class="fas fa-upload"></i>
-                  </span>
-                  <span class="file-label">
-                    Выбрать файл…
-                  </span>
-                </span>
-                <span class="file-name" id="filename">
-                  Нет выбранного файла
-                </span>
-              </label>
-            </div>
-          </div>
-          <div class="field">
-            <div class="control">
-              <button class="button is-primary" id="submit">
-                Загрузить
-              </button>
-            </div>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
+  <h2>Заявление на рассторжение договора</h2>
+<div class="container">
+  <div class="form-group">
+            <label for="name">ФИО</label>
+            <input type="text" id="name" name="name" required oninput="fillFullName()">
+        </div>
+  
+    <h3>Напишите в свободной форме заявление. Укажите причину</h3>
+    
+        <!-- Оставляем скрытыми элементы -->
+        <label for="fullName">ФИО:</label>
+        <input type="text" id="fullName" placeholder="Введите ФИО">
+    
+    <button onclick="startFileInput()">Сканировать заявление</button>
+    <div class="file-list" id="fileList1"> </div>
+     <div id="loader1" class="loader"></div>
+    <!-- Скрытая кнопка -->
+    <button id="submitBtn" style="display: none;" onclick="submitAndHideContainer()">Отправить</button>
 
-  <!-- Подключаем библиотеку Font Awesome для иконок -->
-  <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <video id="video" width="100%" height="auto" style="display: none;"></video>
+    <canvas id="canvas" style="display: none;"></canvas>
+    <form id="form" style="display: none;">
+        <input type="file" id="fileInput" accept="image/*" capture="environment">
+        <div id="filenameDisplay">Нет выбранного файла</div>
+    </form>
+</div>
 
-  <script>
-    const form = document.getElementById("form");
-    const filenameDisplay = document.getElementById("filename");
+<div class="form-container">
+    <form id="myForm" onsubmit="submitAndHideContainer()">
+        <div class="form-group">
+            <label for="date">Дата заполнения:</label>
+            <input type="date" id="date" name="date" required>
+        </div>
 
-    form.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const file = form.file.files[0];
-      const fr = new FileReader();
-      fr.readAsArrayBuffer(file);
-      fr.onload = (f) => {
-        const url = "https://script.google.com/macros/s/AKfycby_nWolfRgCK08OSMKYDre2QjFgEwb6lP4TpII3vkFrpfGerqVEehf-3civmmB_-807/exec"; // URL вашего веб-приложения
+        
 
-        const qs = new URLSearchParams({
-          filename: file.name,
-          mimeType: file.type,
-        });
-        fetch(`${url}?${qs}`, {
-          method: "POST",
-          body: JSON.stringify([...new Int8Array(f.target.result)]),
-        })
-          .then((res) => res.json())
-          .then((data) => {
-            alert("Файл успешно загружен!");
-            // Сбросить значение выбранного файла после загрузки
-            filenameDisplay.textContent = "Нет выбранного файла";
-            form.reset();
-          })
-          .catch(console.log);
-      };
-    });
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+        </div>
 
-    // Показать имя выбранного файла после выбора
-    document.getElementById("uploadfile").addEventListener("change", function () {
-      filenameDisplay.textContent = this.files[0].name;
-    });
-  </script>
+        <div class="form-group">
+            <label for="phone">Телефон:</label>
+            <input type="tel" id="phone" name="phone" required>
+        </div>
+
+<h4>Внимание! Без документов заявления не принимаются
+  </>
+      </h4>
+        <div class="form-group">
+          <label for="fileBtn"><h3>Загрузите документы:</h3></label>
+            <div id="fileList"></div>
+           <div class="loader" id="loader"></div>
+        </div>
+            <button type="button" id="addFileBtn">Выбрать файл</button>
+            <input type="file" id="fileBtn" name="documents" accept=".pdf, .doc, .docx" style="display: none;">
+           
+
+        <!-- Кнопка отправки формы -->
+        <button type="submit">Отправить</button>
+    </form>
+</div>
+<script src="commonfiles.js"></script>
+
+
+<script src="scan.js"></script>
+<script src="script.js"></script>
+  <script src="ura.js"></script>
+<script>
+    function fillFullName() {
+        var fullNameInput = document.getElementById('fullName');
+        var nameInput = document.getElementById('name');
+        fullNameInput.value = nameInput.value;
+    }
+
+    function submitAndHideContainer() {
+        submit(); // Вызываем функцию отправки формы
+        setTimeout(function () {
+            var container = document.querySelector('.container');
+            container.style.display = 'display';
+        }, 1000); // Скрываем контейнер через 1 секунду
+    }
+
+    // Установка текущей даты при загрузке страницы
+    window.onload = function () {
+        var today = new Date();
+        var dateInput = document.getElementById('date');
+        var year = today.getFullYear();
+        var month = ('0' + (today.getMonth() + 1)).slice(-2);
+        var day = ('0' + today.getDate()).slice(-2);
+        var currentDate = year + '-' + month + '-' + day;
+        dateInput.value = currentDate;
+    }
+</script>
 </body>
 </html>
