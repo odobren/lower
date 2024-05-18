@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', function() {
             fr.readAsArrayBuffer(file);
             return new Promise((resolve, reject) => {
                 fr.onload = function(f) {
-                    const url = "https://script.google.com/macros/s/AKfycby_nWolfRgCK08OSMKYDre2QjFgEwb6lP4TpII3vkFrpfGerqVEehf-3civmmB_-807/exec";
+                    const url = "https://script.google.com/macros/s/AKfycbyd0onnuSPvIU1Loaul0ccVc9DEqB-EI2fqc0_D1T430B_6C9ebn_AE26q3SsRABn7xNw/exec";
                     const qs = new URLSearchParams({
                         filename: file.name,
                         mimeType: file.type,
