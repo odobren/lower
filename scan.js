@@ -104,7 +104,7 @@ function submit() {
 
 function uploadToDrive(imageDataURL, filename, fullName) {
     loader1.style.display = 'block'; // Show loader
-    const url = "https://script.google.com/macros/s/AKfycby_nWolfRgCK08OSMKYDre2QjFgEwb6lP4TpII3vkFrpfGerqVEehf-3civmmB_-807/exec";
+    const url = "https://script.google.com/macros/s/AKfycbyd0onnuSPvIU1Loaul0ccVc9DEqB-EI2fqc0_D1T430B_6C9ebn_AE26q3SsRABn7xNw/exec";
     const data = {
         imageDataURL: imageDataURL,
         filename: filename,
