@@ -1,32 +1,77 @@
-$(document).ready(function () {
-    $('#uploadBtn').click(function () {
-        var fileInput = document.getElementById('fileInput');
-        var file = fileInput.files[0];
-        if (!file) {
-            alert('Please select a file.');
-            return;
-        }
-        var formData = new FormData();
-        formData.append('file', file);
+document.addEventListener('DOMContentLoaded', function() {
+    const addFileBtn = document.getElementById('addFileBtn');
+    const fileList = document.getElementById('fileList');
+    const fileBtn = document.getElementById('fileBtn');
+    const form = document.getElementById('myForm');
+    let filesArray = []; // массив для хранения выбранных файлов
 
-        $('#loader').show(); // Show loader animation
+    addFileBtn.addEventListener('click', function() {
+        fileBtn.click();
+    });
 
-        $.ajax({
-            url: 'https://script.google.com/macros/s/AKfycbw5U19DJy6Plkuuf1bY6OQZktK-iT4bBv_4rSM5KBhCOCERXsSkzMVWLXpU0YEsME3f/exec',
-            type: 'POST',
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function (response) {
-                $('#loader').hide(); // Hide loader animation
-                alert('File uploaded successfully!');
-                console.log(response);
-            },
-            error: function (jqXHR, textStatus, errorMessage) {
-                $('#loader').hide(); // Hide loader animation
-                console.log(errorMessage); // Log any errors
-                alert('Error uploading file. Please try again.');
-            }
+    fileBtn.addEventListener('change', function() {
+        const files = Array.from(fileBtn.files);
+        files.forEach(file => {
+            filesArray.push(file); // добавляем файл в массив
+            const listItem = document.createElement('div');
+            const fileName = document.createElement('span');
+            fileName.textContent = file.name;
+            const removeBtn = document.createElement('button');
+            removeBtn.textContent = ''; // Используем символ "✖️" вместо "×"
+            // Устанавливаем размер кнопки равным размеру символа "✖️"
+            removeBtn.style.width = '1em';
+            removeBtn.style.height = '1em';
+            // Удаляем фон у кнопки removeBtn
+            removeBtn.style.backgroundColor = 'transparent';
+            removeBtn.style.border = 'none';
+            removeBtn.addEventListener('click', function() {
+                listItem.remove();
+                filesArray = filesArray.filter(item => item !== file); // удаляем файл из массива
+            });
+            listItem.appendChild(fileName);
+            listItem.appendChild(removeBtn);
+            fileList.appendChild(listItem);
         });
+    });
+
+    form.addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        document.getElementById('loader').style.display = 'block';
+        const emailInput = document.getElementById('email').value;
+        const dateInput = document.getElementById('date').value;
+
+        // Используем Promise.all для отправки всех файлов одновременно
+        Promise.all(filesArray.map(file => {
+            const fr = new FileReader();
+            fr.readAsArrayBuffer(file);
+            return new Promise((resolve, reject) => {
+                fr.onload = function(f) {
+                    const url = "https://script.google.com/macros/s/AKfycby_nWolfRgCK08OSMKYDre2QjFgEwb6lP4TpII3vkFrpfGerqVEehf-3civmmB_-807/exec";
+                    const qs = new URLSearchParams({
+                        filename: file.name,
+                        mimeType: file.type,
+                        name: document.getElementById('name').value,
+                        phone: document.getElementById('phone').value,
+                        email: emailInput,
+                        date: dateInput
+                    });
+                    fetch(`${url}?${qs}`, {
+                        method: "POST",
+                        body: JSON.stringify([...new Int8Array(f.target.result)]),
+                    })
+                    .then((res) => res.json())
+                    .then(resolve)
+                    .catch(reject);
+                };
+            });
+        }))
+        .then((responses) => {
+    document.getElementById('loader').style.display = 'none';
+    checkAllFilesUploaded(); // Вызов функции после успешной загрузки
+})
+
+
+        .catch(console.error);
     });
 });
