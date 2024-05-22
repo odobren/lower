@@ -18,16 +18,29 @@ label {
 }
 
 input[type="text"],
+input[type="email"],
 input[type="tel"],
-input[type="file"] {
+input[type="date"] {
     width: 100%;
     padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    box-sizing: border-box;
 }
 
+
+
+
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="date"] {
+    flex: 2; /* Равномерное распределение места между меткой и полем ввода */
+}
+
+
+
 button {
-    background-color: #ff8c00;
+    background-color: #37C9EF;
     color: #fff;
     padding: 10px 20px;
     border: none;
@@ -110,11 +123,5 @@ h2 {
 
 button[type="submit"] {
     margin-top: 20px; /* Add margin to create space between buttons */
-     /* Change the background color */
-    color: #fff;
-    padding: 20px 30px; /* Increase padding for a larger button */
-    border: none;
-    border-radius: 25px; /* Adjust border radius for a different shape */
-    cursor: pointer;
-    font-size: 24px; /* Increase font size for a larger button */
+    
 }
