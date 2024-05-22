@@ -15,50 +15,42 @@ function toggleControls(enable) {
 }
 
 function checkAllFilesUploaded() {
-    const loader1 = document.getElementById('loader1');
-    const fileList1 = document.getElementById('fileList1');
+   
     const loader = document.getElementById('loader');
     const fileList = document.getElementById('fileList');
 
-    if (loader1.style.display === 'none' && fileList1.children.length > 0 &&
-        loader.style.display === 'none' && fileList.children.length > 0) {
+    if (loader.style.display === 'none' && fileList.children.length > 0) {
         displaySuccessMessage();
     }
 }
 
-// Промис, который будет выполняться после загрузки всех файлов и возвращать результат
-function uploadAllFiles() {
-    toggleControls(false); // Блокируем элементы управления перед началом загрузки
+// Функция сохранения состояния загрузки в localStorage
+function saveUploadStatus() {
+    const uploadStatus = {
+        
+        loader: document.getElementById('loader').style.display,
+        fileList: document.getElementById('fileList').children.length
+    };
+    localStorage.setItem('uploadStatus', JSON.stringify(uploadStatus));
+}
 
-    const promise1 = new Promise((resolve, reject) => {
-        const loader1 = document.getElementById('loader1');
-        const fileList1 = document.getElementById('fileList1');
-
-        if (loader1.style.display === 'none' && fileList1.children.length > 0) {
-            resolve();
-        } else {
-            reject();
+// Функция для проверки состояния загрузки после включения экрана
+function checkUploadStatusOnScreenOn() {
+    const uploadStatus = JSON.parse(localStorage.getItem('uploadStatus'));
+    if (uploadStatus) {
+        if (uploadStatus.loader === 'none' && uploadStatus.fileList > 0) {
+            displaySuccessMessage();
         }
-    });
-
-    const promise2 = new Promise((resolve, reject) => {
-        const loader = document.getElementById('loader');
-        const fileList = document.getElementById('fileList');
-
-        if (loader.style.display === 'none' && fileList.children.length > 0) {
-            resolve();
-        } else {
-            reject();
-        }
-    });
-
-    return Promise.all([promise1, promise2]);
+    }
 }
 
 // Обработчик успешной отправки файлов
 function handleUploadSuccess() {
+    toggleControls(false); // Блокируем элементы управления перед началом загрузки
+
     uploadAllFiles()
         .then(() => {
+            saveUploadStatus(); // Сохраняем состояние загрузки перед переходом на другую страницу
             displaySuccessMessage();
             toggleControls(true); // Разблокируем элементы управления после успешной загрузки
         })
@@ -67,3 +59,6 @@ function handleUploadSuccess() {
             toggleControls(true); // Разблокируем элементы управления в случае ошибки загрузки
         });
 }
+
+// Запуск проверки состояния загрузки при включении экрана
+window.addEventListener('screenon', checkUploadStatusOnScreenOn);
