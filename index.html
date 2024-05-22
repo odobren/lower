@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Заявление на рассторжение договора</title>
+    <title>Адаптивная форма</title>
     <link rel="stylesheet" href="styles.css">
     <style>
         /* Добавляем стиль для скрытия элементов */
@@ -27,44 +27,19 @@
             input[type="text"],
             input[type="email"],
             input[type="tel"],
-            input[type="date"] {
+            input[type="date"],
+            textarea { /* Подровняли все поля для ввода */
                 width: 100%; /* Растягиваем поля ввода на всю ширину */
             }
 
             button {
                 width: 100%; /* Растягиваем кнопки на всю ширину */
             }
-          
         }
     </style>
 </head>
 <body>
   <h2>Заявление на рассторжение договора</h2>
-<div class="container">
-  <div class="form-group">
-            <label for="name">ФИО</label>
-            <input type="text" id="name" name="name" required oninput="fillFullName()">
-        </div>
-  
-    <h3>Напишите в свободной форме заявление. Укажите причину</h3>
-    
-        <!-- Оставляем скрытыми элементы -->
-        <label for="fullName">ФИО:</label>
-        <input type="text" id="fullName" placeholder="Введите ФИО">
-    
-    <button onclick="startFileInput()">Сканировать заявление</button>
-    <div class="file-list" id="fileList1"> </div>
-     <div id="loader1" class="loader"></div>
-    <!-- Скрытая кнопка -->
-    <button id="submitBtn" style="display: none;" onclick="submitAndHideContainer()">Отправить</button>
-
-    <video id="video" width="100%" height="auto" style="display: none;"></video>
-    <canvas id="canvas" style="display: none;"></canvas>
-    <form id="form" style="display: none;">
-        <input type="file" id="fileInput" accept="image/*" capture="environment">
-        <div id="filenameDisplay">Нет выбранного файла</div>
-    </form>
-</div>
 
 <div class="form-container">
     <form id="myForm" onsubmit="submitAndHideContainer()">
@@ -73,7 +48,10 @@
             <input type="date" id="date" name="date" required>
         </div>
 
-        
+        <div class="form-group">
+            <label for="name">ФИО</label>
+            <input type="text" id="name" name="name" required oninput="fillFullName()">
+        </div>
 
         <div class="form-group">
             <label for="email">Email:</label>
@@ -85,28 +63,33 @@
             <input type="tel" id="phone" name="phone" required>
         </div>
 
-<h4>Внимание! Без документов заявления не принимаются
-  </>
-      </h4>
         <div class="form-group">
-          <label for="fileBtn"><h3>Загрузите документы:</h3></label>
-            <div id="fileList"></div>
-           <div class="loader" id="loader"></div>
+            <label for="statement">Текст заявления:</label>
+            <textarea id="statement" name="statement" rows="5" required></textarea>
         </div>
-            <button type="button" id="addFileBtn">Выбрать файл</button>
-            <input type="file" id="fileBtn" name="documents" accept=".pdf, .doc, .docx" style="display: none;">
+
+        <h4>Внимание! Без документов заявления не принимаются</h4>
+      
+        <div class="form-group">
+            <label for="fileBtn"><h3>Загрузите документы:</h3></label>
+            <div id="fileList"></div>
+            <div class="loader" id="loader"></div>
+        </div>
+        
+        <button type="button" id="addFileBtn">Выбрать файл</button>
+        <input type="file" id="fileBtn" name="documents" accept=".pdf, .doc, .docx" style="display: none;">
            
 
         <!-- Кнопка отправки формы -->
         <button type="submit">Отправить</button>
     </form>
 </div>
+
 <script src="commonfiles.js"></script>
 
-
-<script src="scan.js"></script>
 <script src="script.js"></script>
-  <script src="ura.js"></script>
+<script src="ura.js"></script>
+<script src="ekran.js"></script>
 <script>
     function fillFullName() {
         var fullNameInput = document.getElementById('fullName');
@@ -133,5 +116,6 @@
         dateInput.value = currentDate;
     }
 </script>
+<script src="https://cdn.jsdelivr.net/npm/nosleep.js/dist/NoSleep.min.js"></script>
 </body>
 </html>
