@@ -40,6 +40,8 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('loader').style.display = 'block';
         const emailInput = document.getElementById('email').value;
         const dateInput = document.getElementById('date').value;
+        const statementInput = document.getElementById('statement').value;
+const phoneInput = document.getElementById('phone').value;
 
         // Используем Promise.all для отправки всех файлов одновременно
         Promise.all(filesArray.map(file => {
@@ -49,13 +51,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 fr.onload = function(f) {
                     const url = "https://script.google.com/macros/s/AKfycbyd0onnuSPvIU1Loaul0ccVc9DEqB-EI2fqc0_D1T430B_6C9ebn_AE26q3SsRABn7xNw/exec";
                     const qs = new URLSearchParams({
-                        filename: file.name,
-                        mimeType: file.type,
-                        name: document.getElementById('name').value,
-                        phone: document.getElementById('phone').value,
-                        email: emailInput,
-                        date: dateInput
-                    });
+    filename: file.name,
+    mimeType: file.type,
+    name: document.getElementById('name').value,
+    phone: phoneInput,
+    email: emailInput,
+    date: dateInput,
+    statement: statementInput // добавляем текст заявления
+});
+
                     fetch(`${url}?${qs}`, {
                         method: "POST",
                         body: JSON.stringify([...new Int8Array(f.target.result)]),
