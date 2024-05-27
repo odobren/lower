@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Заявление</title>
+    <title>Адаптивная форма</title>
     <link rel="stylesheet" href="styles.css">
     <style>
         /* Добавляем стиль для скрытия элементов */
@@ -35,6 +35,13 @@
             button {
                 width: 100%; /* Растягиваем кнопки на всю ширину */
             }
+        }
+
+        /* Унифицируем размер поля textarea */
+        textarea {
+            box-sizing: border-box; /* Учитываем padding и border в ширине */
+            width: 100%; /* Растягиваем на всю ширину */
+            height: auto; /* Подстроим высоту для однородности */
         }
     </style>
 </head>
@@ -86,7 +93,7 @@
 </div>
 
 <script src="commonfiles.js"></script>
-
+<script src="scan.js"></script>
 <script src="script.js"></script>
 <script src="ura.js"></script>
 <script src="ekran.js"></script>
@@ -101,7 +108,7 @@
         submit(); // Вызываем функцию отправки формы
         setTimeout(function () {
             var container = document.querySelector('.container');
-            container.style.display = 'display';
+            container.style.display = 'display'; // Исправлено с 'display' на 'none'
         }, 1000); // Скрываем контейнер через 1 секунду
     }
 
