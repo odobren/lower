@@ -109,3 +109,17 @@ h2 {
 button[type="submit"] {
     margin-top: 20px; /* Add margin to create space between buttons */
 }
+
+.additional-info {
+    font-size: 14px; /* Уменьшенный размер шрифта для дополнительной информации */
+}
+
+.image-container {
+    text-align: center;
+    margin-top: 20px; /* Добавим отступ сверху для изображения */
+}
+
+.bottom-image {
+    max-width: 100%;
+    height: auto;
+}
