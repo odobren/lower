@@ -1,6 +1,7 @@
 body {
-            font-family: 'Montserrat', sans-serif;
-        }
+    font-family: 'Montserrat', sans-serif;
+    font-size: 24px; /* Устанавливаем размер шрифта 24px */
+}
 
 .form-container {
     max-width: 400px;
@@ -128,4 +129,3 @@ button[type="submit"] {
     display: block;
     margin: 0 auto;
 }
-
