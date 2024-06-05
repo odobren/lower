@@ -123,3 +123,9 @@ button[type="submit"] {
     max-width: 100%;
     height: auto;
 }
+
+button[type="submit"] {
+    display: block;
+    margin: 0 auto;
+}
+
