@@ -50,11 +50,9 @@
   <h2>Заявление на рассторжение договора</h2>
 
 <div class="form-container">
-  <p1>Ваше обращение напрямую отправится к:
-
-Самал Кожагелдинова - исполнительный директор
-
-Гаухар Смагулова - юрист</p1>
+  <h4>Ваше обращение напрямую отправится к:</h4>
+    <p>Самал Кожагелдинова - исполнительный директор</p>
+    <p>Гаухар Смагулова - юрист</p>
     <form id="myForm" onsubmit="submitAndHideContainer()">
         <div class="form-group">
             <label for="date">Дата заполнения:</label>
@@ -97,9 +95,7 @@
         
        <!-- Дополнительная информация -->
 <div class="form-group">
-    <h4>Ваше обращение напрямую отправится к:</h4>
-    <p>Самал Кожагелдинова - исполнительный директор</p>
-    <p>Гаухар Смагулова - юрист</p>
+    
     <h4>Юридическая ответственность.</h4>
     <p>Пожалуйста, обратите внимание на то, что предоставление заведомо ложных или недостоверных сведений может повлечь за собой юридические последствия. Прежде чем отправлять ваше сообщение, пожалуйста, внимательно проверьте его содержание на корректность и полноту.</p>
     <p>Ваше заявление является окончательным и не может быть отозвано или изменено после его отправки.</p>
@@ -121,7 +117,7 @@
         <button type="submit">Отправить</button>
         
     </form>
-</div>
+
 
 <script src="commonfiles.js"></script>
 <script src="scan.js"></script>
@@ -131,4 +127,31 @@
 <script>
     function fillFullName() {
         var fullNameInput = document.getElementById('fullName');
-        var nameInput = document
+        var nameInput = document.getElementById('name');
+        fullNameInput.value = nameInput.value;
+    }
+
+    function submitAndHideContainer() {
+        submit(); // Вызываем функцию отправки формы
+        setTimeout(function () {
+            var container = document.querySelector('.container');
+            container.style.display = 'none'; // Исправлено с 'display' на 'none'
+        }, 1000); // Скрываем контейнер через 1 секунду
+    }
+
+    // Установка текущей даты при загрузке страницы
+    window.onload = function () {
+        var today = new Date();
+        var dateInput = document.getElementById('date');
+        var year = today.getFullYear();
+        var month = ('0' + (today.getMonth() + 1)).slice(-2);
+        var day = ('0' + today.getDate()).slice(-2);
+        var currentDate = year + '-' + month + '-' + day;
+        dateInput.value = currentDate;
+    }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/nosleep.js/dist/NoSleep.min.js"></script>
+</div>
+  </body>
+  
+</html>
