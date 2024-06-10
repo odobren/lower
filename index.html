@@ -48,12 +48,13 @@
 </head>
 <body>
   <h2>Заявление на рассторжение договора</h2>
-<p1>Ваше обращение напрямую отправится к:
+
+<div class="form-container">
+  <p1>Ваше обращение напрямую отправится к:
 
 Самал Кожагелдинова - исполнительный директор
 
 Гаухар Смагулова - юрист</p1>
-<div class="form-container">
     <form id="myForm" onsubmit="submitAndHideContainer()">
         <div class="form-group">
             <label for="date">Дата заполнения:</label>
@@ -67,7 +68,10 @@
 
         <div class="form-group">
             <label for="email">Email:</label>
+          <b id="emailSubtitle">Укажите верный адрес. На указанную электронную почту придет ответ на обращение.</b>
+  
             <input type="email" id="email" name="email" required>
+            
         </div>
 
         <div class="form-group">
@@ -100,8 +104,7 @@
     <p>Пожалуйста, обратите внимание на то, что предоставление заведомо ложных или недостоверных сведений может повлечь за собой юридические последствия. Прежде чем отправлять ваше сообщение, пожалуйста, внимательно проверьте его содержание на корректность и полноту.</p>
     <p>Ваше заявление является окончательным и не может быть отозвано или изменено после его отправки.</p>
     <p>При необходимости, мы оставляем за собой право передать предоставленные вами данные в правоохранительные органы или в суд для расследования или разрешения правовых вопросов.</p>
-    <h4>Соглашение.</h4>
-    <p><input type="checkbox" id="agreement" name="agreement" required>Я согласен и несу ответственность за отправленное обращение.</p>
+    
 </div>
 
 
@@ -110,7 +113,8 @@
 
     <!-- Изображение для обеспечения законности и правопорядка -->
     <img src="Обеспечение законности и правопорядка.png" alt="Обеспечение законности и правопорядка" style="width: 100%;">
-        
+        <h4>Соглашение.</h4>
+    <p><input type="checkbox" id="agreement" name="agreement" required>Я согласен и несу ответственность за отправленное обращение.</p>
         <div class="loader" id="loader"></div>
 <!-- Кнопка отправки формы -->
     
@@ -127,29 +131,4 @@
 <script>
     function fillFullName() {
         var fullNameInput = document.getElementById('fullName');
-        var nameInput = document.getElementById('name');
-        fullNameInput.value = nameInput.value;
-    }
-
-    function submitAndHideContainer() {
-        submit(); // Вызываем функцию отправки формы
-        setTimeout(function () {
-            var container = document.querySelector('.container');
-            container.style.display = 'none'; // Исправлено с 'display' на 'none'
-        }, 1000); // Скрываем контейнер через 1 секунду
-    }
-
-    // Установка текущей даты при загрузке страницы
-    window.onload = function () {
-        var today = new Date();
-        var dateInput = document.getElementById('date');
-        var year = today.getFullYear();
-        var month = ('0' + (today.getMonth() + 1)).slice(-2);
-        var day = ('0' + today.getDate()).slice(-2);
-        var currentDate = year + '-' + month + '-' + day;
-        dateInput.value = currentDate;
-    }
-</script>
-<script src="https://cdn.jsdelivr.net/npm/nosleep.js/dist/NoSleep.min.js"></script>
-</body>
-</html>
+        var nameInput = document
